@@ -30,7 +30,8 @@ En este laboratorio no usamos ViewModel, sino que todo se resolvió con `remembe
 - navegacion/ → Rutas y navegación entre pantallas.  
 - internet/ → Código para conectarse a la API de Pexels.  
 - componentes/ → componentes que se repiten, como la tarjeta de foto.  
-- ui.theme/ → Colores y temas claro/oscuro.  
+- ui.theme/ → Colores y temas claro/oscuro.
+- datos/ → modelos y datos de prueba.  
 
 
 # Demo en video
