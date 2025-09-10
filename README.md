@@ -34,7 +34,8 @@ En este laboratorio no usamos ViewModel, sino que todo se resolvió con `remembe
 
 
 # Demo en video
-link del video: 
+link del video: https://youtu.be/u4IDXCtY3JY
+
 
 
 
