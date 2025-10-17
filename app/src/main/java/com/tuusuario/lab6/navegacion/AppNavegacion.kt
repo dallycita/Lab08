@@ -7,6 +7,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.tuusuario.lab6.pantallas.Detalles
+import com.tuusuario.lab6.pantallas.Favoritos
 import com.tuusuario.lab6.pantallas.Inicio
 import com.tuusuario.lab6.pantallas.Perfil
 
@@ -15,30 +16,29 @@ object Rutas {
     const val INICIO = "inicio"
     const val DETALLES = "detalles"
     const val PERFIL = "perfil"
+    const val FAVORITOS = "favoritos"  // 🔥 NUEVA RUTA
 }
 
 // función de navegación principal
-// aquí se conecta el NavHost con las pantallas: inicio, detalles y perfil
 @Composable
 fun AppNavegacion(
     esOscuro: Boolean,
     cambiarTema: () -> Unit
 ) {
-    // controlador de navegación
     val nav = rememberNavController()
 
-    // definición del NavHost con la pantalla de inicio como la primera
     NavHost(navController = nav, startDestination = Rutas.INICIO) {
 
         // pantalla de inicio
         composable(Rutas.INICIO) {
             Inicio(
                 irADetalle = { fotoId -> nav.navigate("${Rutas.DETALLES}/$fotoId") },
-                irAPerfil = { nav.navigate(Rutas.PERFIL) }
+                irAPerfil = { nav.navigate(Rutas.PERFIL) },
+                irAFavoritos = { nav.navigate(Rutas.FAVORITOS) }  // 🔥 NUEVO PARÁMETRO
             )
         }
 
-        // pantalla de detalles, recibe el id de la foto como argumento
+        // pantalla de detalles
         composable(
             route = "${Rutas.DETALLES}/{fotoId}",
             arguments = listOf(navArgument("fotoId") { type = NavType.StringType })
@@ -47,11 +47,19 @@ fun AppNavegacion(
             Detalles(fotoId = id, volver = { nav.popBackStack() })
         }
 
-        // pantalla de perfil con opción para cambiar entre tema claro/oscuro
+        // pantalla de perfil
         composable(Rutas.PERFIL) {
             Perfil(
                 esOscuro = esOscuro,
                 cambiarTema = cambiarTema,
+                volver = { nav.popBackStack() }
+            )
+        }
+
+        // pantalla de favoritos
+        composable(Rutas.FAVORITOS) {
+            Favoritos(
+                irADetalle = { fotoId -> nav.navigate("${Rutas.DETALLES}/$fotoId") },
                 volver = { nav.popBackStack() }
             )
         }

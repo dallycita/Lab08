@@ -22,5 +22,6 @@ data class PhotoEntity(
     val queryKey: String,
     val pageIndex: Int,
     val isFavorite: Boolean = false,
-    val updatedAt: Long = System.currentTimeMillis()
+    val updatedAt: Long = System.currentTimeMillis(),
+    val likes: Int = 0
 )

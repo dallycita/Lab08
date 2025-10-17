@@ -33,7 +33,8 @@ import kotlinx.coroutines.launch
 @Composable
 fun Inicio(
     irADetalle: (String) -> Unit,
-    irAPerfil: () -> Unit
+    irAPerfil: () -> Unit,
+    irAFavoritos: () -> Unit
 ) {
     val context = LocalContext.current
     val db = remember { AppDatabase.getDatabase(context) }
@@ -57,7 +58,7 @@ fun Inicio(
 
     var favoritos by remember { mutableStateOf(mapOf<String, Boolean>()) }
 
-    // 🔥 CORREGIDO: Cargar el estado de favoritos desde Room cuando cambian las fotos visibles
+    // Cargar el estado de favoritos desde Room cuando cambian las fotos visibles
     LaunchedEffect(visibles) {
         if (visibles.isNotEmpty()) {
             val ids = visibles.map { it.id }
@@ -152,6 +153,10 @@ fun Inicio(
                     }
                 },
                 actions = {
+                    // Botón de favoritos
+                    IconButton(onClick = irAFavoritos) {
+                        Icon(Icons.Filled.Favorite, contentDescription = "Favoritos")
+                    }
                     IconButton(onClick = irAPerfil) {
                         Icon(Icons.Filled.AccountCircle, contentDescription = "Perfil")
                     }

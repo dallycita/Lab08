@@ -1,10 +1,11 @@
 Lab 8 - Galería de Fotos con Room
 Descripción
 Este laboratorio se hizo en Kotlin con Jetpack Compose. La idea fue crear una app que se conecta a la API de Pexels para buscar fotos, mostrarlas en una cuadrícula y poder navegar entre pantallas. Además, se integró Room para tener persistencia local de fotos, favoritos y búsquedas recientes.
-La app tiene tres partes principales:
+La app tiene cuatro pantallas principales:
 
 Pantalla principal (Inicio): donde se hace la búsqueda y se muestran las fotos.
 Pantalla de detalles (Details): donde se abre la foto más grande y se ven algunos datos.
+Pantalla de favoritos: muestra todas las fotos marcadas como favoritas con filtro por autor.
 Pantalla de perfil (Profile): donde se pone un avatar de ejemplo, nombre y correo falso, y un switch para cambiar entre tema claro y oscuro.
 
 Lo que se implementó
@@ -16,12 +17,43 @@ Si tocas una foto, se abre la pantalla de detalles con la imagen en grande, el a
 En la pantalla de perfil hay un avatar fijo, nombre y correo de ejemplo, y un switch que deja cambiar entre tema claro y oscuro.
 Todo está hecho con Material 3 para que cambie bien entre light y dark.
 
-Persistencia con Room (nuevo en Lab 8)
+Persistencia con Room
 
 Cache por consulta: cuando buscas algo, los resultados se guardan en la base de datos local asociados a la búsqueda y la página. Si volvés a buscar lo mismo, carga instantáneo desde cache.
 Favoritos persistentes: podés marcar fotos como favoritas con el corazón y ese estado se guarda en Room. Cuando cerrás y volvés a abrir la app, los favoritos siguen ahí.
 Búsquedas recientes: la app guarda las últimas 10 búsquedas que hiciste y te las muestra como chips para que las reutilices fácilmente.
 Modo offline básico: si perdés la conexión, la app te muestra las fotos que tenés en cache de búsquedas anteriores. Aparece un indicador "Modo Offline" cuando esto pasa.
+
+⭐ Extras implementados (para subir nota)
+1. Pantalla de Favoritos con filtro por autor
+
+Pantalla dedicada que muestra todas las fotos favoritas guardadas en Room.
+Botón de filtro en el TopAppBar para filtrar por fotógrafo.
+Dropdown menu con lista de todos los autores de fotos favoritas.
+Si no hay favoritos, muestra un mensaje vacío con icono.
+Podés quitar favoritos directamente desde esta pantalla.
+
+2. Migración de Room (versión 1 → 2)
+
+Se agregó un nuevo campo likes: Int a la tabla photos.
+Se implementó una migración formal usando Migration(1, 2) que agrega la columna sin perder datos.
+La migración se ejecuta automáticamente al actualizar la app.
+Esto simula un cambio real de schema en producción.
+
+3. Testing de DAOs
+
+Se crearon pruebas unitarias para PhotoDao usando Room en memoria.
+Tests implementados:
+
+insertAndRetrievePhoto: Inserta y recupera una foto por ID.
+getPhotosByQueryAndPage: Verifica filtrado por query y página.
+toggleFavorite: Prueba marcar/desmarcar favoritos.
+getFavoritesFlow: Verifica que el Flow de favoritos funcione.
+deleteOldCache: Prueba limpieza de cache antiguo (respeta favoritos).
+getAllPhotosByQuery: Verifica obtener todas las páginas de una query.
+
+
+Los tests usan @RunWith(AndroidJUnit4::class) y base de datos en memoria.
 
 Manejo de estado
 En este laboratorio no usamos ViewModel, sino que todo se resolvió con remember y rememberSaveable.
@@ -30,20 +62,21 @@ La query de la búsqueda se guarda con rememberSaveable, para que no se pierda a
 El tema (claro/oscuro) también está guardado en un booleano con rememberSaveable.
 Para el debounce usamos snapshotFlow { query } con debounce(500), dentro de un LaunchedEffect.
 Los favoritos y cache se manejan con Room directamente desde los Composables.
+Los Flows de Room se observan con collectAsState() para reactividad automática.
 
 Organización del proyecto
 
-pantallas/ → tres pantallas: Inicio, Detalles y Perfil.
+pantallas/ → cuatro pantallas: Inicio, Detalles, Favoritos y Perfil.
 navegacion/ → Rutas y navegación entre pantallas.
 internet/ → Código para conectarse a la API de Pexels.
-database/ → Entidades de Room (PhotoEntity, RecentSearchEntity), DAOs y la base de datos.
+database/ → Entidades de Room (PhotoEntity, RecentSearchEntity), DAOs, base de datos y migraciones.
 repository/ → Lógica de cache-first: intenta red primero, si falla usa cache.
 componentes/ → componentes que se repiten, como la tarjeta de foto.
 ui.theme/ → Colores y temas claro/oscuro.
 datos/ → modelos y datos de prueba.
 
 Modelo de datos (Room)
-PhotoEntity
+PhotoEntity (versión 2)
 Almacena las fotos con estos campos:
 
 id, photographer, urlMedium, urlLarge, width, height
@@ -51,6 +84,7 @@ queryKey: la búsqueda normalizada a la que pertenece
 pageIndex: número de página
 isFavorite: si está marcada como favorita
 updatedAt: timestamp para saber cuándo se guardó
+likes: número de likes (agregado en migración 1→2)
 
 Tiene índices en (queryKey, pageIndex) y en isFavorite para búsquedas eficientes.
 RecentSearchEntity
@@ -75,3 +109,5 @@ Detectamos cuando estás cerca del final de la lista
 Cargamos la página siguiente automáticamente
 Cada página se persiste por separado en Room
 
+
+Link del video: 
