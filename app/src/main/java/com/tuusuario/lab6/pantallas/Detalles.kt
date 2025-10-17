@@ -41,6 +41,7 @@ fun Detalles(
     var resolucion by remember { mutableStateOf<String?>(null) }
     var esFavorito by remember { mutableStateOf(false) }
 
+    // Cargar foto
     LaunchedEffect(fotoId) {
         try {
             cargando = true
@@ -65,10 +66,10 @@ fun Detalles(
         }
     }
 
+    // 🔥 CORREGIDO: Cargar estado de favorito desde Room
     LaunchedEffect(fotoId) {
-        db.photoDao().getPhotoById(fotoId)?.let {
-            esFavorito = it.isFavorite
-        }
+        val entity = db.photoDao().getPhotoById(fotoId)
+        esFavorito = entity?.isFavorite ?: false
     }
 
     Scaffold(
@@ -84,6 +85,7 @@ fun Detalles(
                     }
                 },
                 actions = {
+                    // Botón de favorito
                     IconButton(
                         onClick = {
                             scope.launch {
@@ -99,6 +101,7 @@ fun Detalles(
                         )
                     }
 
+                    // Botón de compartir
                     IconButton(
                         onClick = {
                             foto?.let { f ->

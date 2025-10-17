@@ -57,6 +57,21 @@ fun Inicio(
 
     var favoritos by remember { mutableStateOf(mapOf<String, Boolean>()) }
 
+    // 🔥 CORREGIDO: Cargar el estado de favoritos desde Room cuando cambian las fotos visibles
+    LaunchedEffect(visibles) {
+        if (visibles.isNotEmpty()) {
+            val ids = visibles.map { it.id }
+            val favoritosActualizados = mutableMapOf<String, Boolean>()
+            ids.forEach { id ->
+                val entity = db.photoDao().getPhotoById(id)
+                if (entity != null) {
+                    favoritosActualizados[id] = entity.isFavorite
+                }
+            }
+            favoritos = favoritosActualizados
+        }
+    }
+
     LaunchedEffect(textoBuscado) {
         snapshotFlow { textoBuscado }
             .map { it.trim() }

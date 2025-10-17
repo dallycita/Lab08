@@ -1,6 +1,6 @@
 package com.tuusuario.lab6.internet
 
-import com.tuusuario.lab6.CLAVE_PEXELS
+import com.tuusuario.lab6.BuildConfig
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -10,10 +10,10 @@ import retrofit2.converter.gson.GsonConverterFactory
 // cliente simple para la API de Pexels
 object ClientePexels {
 
-    // Agrega la clave de Pexels a cada request
+    // Agrega la clave de Pexels a cada request (desde BuildConfig)
     private val auth = Interceptor { chain ->
         val req = chain.request().newBuilder()
-            .addHeader("Authorization", CLAVE_PEXELS)
+            .addHeader("Authorization", BuildConfig.PEXELS_API_KEY)
             .build()
         chain.proceed(req)
     }
