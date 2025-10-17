@@ -65,14 +65,15 @@ Los Flows de Room se observan con collectAsState() para reactividad automática.
 
 Organización del proyecto
 
-pantallas/ → cuatro pantallas: Inicio, Detalles, Favoritos y Perfil.
-navegacion/ → Rutas y navegación entre pantallas.
-internet/ → Código para conectarse a la API de Pexels.
-database/ → Entidades de Room (PhotoEntity, RecentSearchEntity), DAOs, base de datos y migraciones.
-repository/ → Lógica de cache-first: intenta red primero, si falla usa cache.
-componentes/ → componentes que se repiten, como la tarjeta de foto.
-ui.theme/ → Colores y temas claro/oscuro.
-datos/ → modelos y datos de prueba.
+1. pantallas/ → cuatro pantallas: Inicio, Detalles, Favoritos y Perfil.
+2. navegacion/ → Rutas y navegación entre pantallas.
+3. internet/ → Código para conectarse a la API de Pexels.
+4. database/ → Entidades de Room (PhotoEntity, RecentSearchEntity), DAOs, base de datos y migraciones.
+5. repository/ → Lógica de cache-first: intenta red primero, si falla usa cache.
+6. componentes/ → componentes que se repiten, como la tarjeta de foto.
+7. ui.theme/ → Colores y temas claro/oscuro.
+8. datos/ → modelos y datos de prueba.
+
 
 Modelo de datos (Room)
 PhotoEntity (versión 2)
