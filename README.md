@@ -24,7 +24,6 @@ Favoritos persistentes: podés marcar fotos como favoritas con el corazón y ese
 Búsquedas recientes: la app guarda las últimas 10 búsquedas que hiciste y te las muestra como chips para que las reutilices fácilmente.
 Modo offline básico: si perdés la conexión, la app te muestra las fotos que tenés en cache de búsquedas anteriores. Aparece un indicador "Modo Offline" cuando esto pasa.
 
-⭐ Extras implementados (para subir nota)
 1. Pantalla de Favoritos con filtro por autor
 
 Pantalla dedicada que muestra todas las fotos favoritas guardadas en Room.
